@@ -21,7 +21,7 @@ $password =$_POST['password'];
         header("Location: dashboard.php");
         exit();
     } else {
-        echo "Invalid credentials!";
+        header("Location: forgot_password.php");
     }
 }
 ?>
