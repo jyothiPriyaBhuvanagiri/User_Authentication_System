@@ -3,12 +3,18 @@ global $conn;
 include ('includes/db.php');
 session_start();
 if ($_SERVER['REQUEST_METHOD']== 'POST'){
-$email = $_POST('email');
-$password =$_POST('password');
-    $sql = "SELECT * FROM users WHERE email = :email";
+$email = $_POST['email'];
+$password =$_POST['password'];
+    $sql = "SELECT * FROM users WHERE email = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->execute(['email' => $email]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Bind the email parameter
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+
+    // Get the result
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+
     if ($user && password_verify($password, $user['password'])) {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];

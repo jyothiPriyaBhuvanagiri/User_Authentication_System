@@ -1,14 +1,14 @@
 <?php
-// db.php
-$host = 'localhost';
-$dbname = 'user_auth';
-$username = 'root';  // Default username for XAMPP/MAMP
-$password = '';      // Default password for XAMPP/MAMP (empty string)
+$servername = "localhost"; // Docker MySQL will be available on localhost
+$username = "root";
+$password = "my-secret-pw"; // Your MySQL root password
+$dbname = "user_auth"; // Your database
 
-try {
-    $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
