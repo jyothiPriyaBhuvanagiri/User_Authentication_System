@@ -1,45 +1,27 @@
-<?php
-global $conn;
-include('includes/db.php');
-session_start();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Password</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4">Reset Password</h2>
 
-if (isset($_GET['token'])) {
-    $token = $_GET['token'];
+    <form method="POST" action="reset_password.php?token=<?php echo htmlspecialchars($_GET['token'], ENT_QUOTES, 'UTF-8'); ?>">
+        <div class="mb-3">
+            <label for="password" class="form-label">New Password:</label>
+            <input type="password" id="password" name="password" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Reset Password</button>
+    </form>
+</div>
 
-    // Check if the token is valid
-    $sql = "SELECT * FROM users WHERE reset_token = ? AND reset_token_expire > NOW()";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $token);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        // Token is valid
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $new_password = password_hash($_POST['password'], PASSWORD_BCRYPT);
-            $user = $result->fetch_assoc();
-
-            // Update the password
-            $sql = "UPDATE users SET password = ?, reset_token = NULL, reset_token_expire = NULL WHERE id = ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("si", $new_password, $user['id']);
-            if ($stmt->execute()) {
-                echo "Password successfully reset. <a href='login.php'>Login here</a>";
-            } else {
-                echo "Error resetting password.";
-            }
-        }
-    } else {
-        echo "Invalid or expired token.";
-    }
-} else {
-    echo "No token provided.";
-}
-?>
-
-<!-- HTML Form -->
-<form method="POST" action="reset_password.php?token=<?php echo $_GET['token']; ?>">
-    <label>New Password:</label>
-    <input type="password" name="password" required>
-    <button type="submit">Reset Password</button>
-</form>
+<!-- Bootstrap JS and Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
