@@ -27,6 +27,11 @@ $password =$_POST['password'];
 ?>
 
 <!-- HTML Form -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <form method="POST" action="login.php">
     <label>Email:</label>
     <input type="email" name="email" required>
@@ -34,3 +39,6 @@ $password =$_POST['password'];
     <input type="password" name="password" required>
     <button type="submit">Login</button>
 </form>
+</head>
+    </body>
+</html>
